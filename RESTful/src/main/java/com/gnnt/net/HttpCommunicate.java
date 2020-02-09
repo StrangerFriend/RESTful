@@ -202,7 +202,7 @@ public class HttpCommunicate {
                         //成功
                         String bodyStr = getResponseStr(response);
                         if(TextUtils.isEmpty(bodyStr)){
-                            callback.response(1,"","");
+                            callback.response(1,"",null);
                         }else {
                             //把服务端返回的报文进行映射
                             if(classOf == null || classOf == String.class){
