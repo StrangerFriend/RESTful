@@ -1,7 +1,5 @@
 package com.gnnt.net;
 
-import android.util.Log;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -25,6 +23,13 @@ import okhttp3.Response;
  *********************************************************************************/
 public class Upload {
 
+    /**
+     * 上传图片
+     * @param url 请求完整地址
+     * @param userId 用户id
+     * @param token token
+     * @param callback 回调接口
+     */
     public static void uploadLogo(String url, String userId, String token,Callback callback){
 //        String resultPath = BitmapUtil.compressImage(getApplication(),path);
         String resultPath = url;
@@ -47,7 +52,7 @@ public class Upload {
             @Override
             public void onFailure(Call call, IOException e) {
 //                uploadErrorLiveData.postValue("上传失败");
-                callback.fail("");
+                callback.fail("上传失败");
             }
 
             @Override
@@ -57,7 +62,7 @@ public class Upload {
 //                    uploadSuccessLiveData.postValue(json);
                     callback.success();
                 }else {
-                    callback.fail("");
+                    callback.fail("上传失败");
                 }
             }
         });
