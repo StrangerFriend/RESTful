@@ -1,4 +1,4 @@
-package com.gnnt.net;
+package com.gnnt.net.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /********************************************************************************
- *Upload 2020/2/8
+ *HttpFileRequest 2020/2/8
  *<p>
  *类说明:图片上传<br/>
  *<br/>
@@ -21,7 +21,7 @@ import okhttp3.Response;
  *Copyright2019 by GNNT Company. All Rights Reserved.
  *@author:jiacl
  *********************************************************************************/
-public class Upload {
+public class HttpFileRequest {
 
     /**
      * 上传图片
@@ -30,7 +30,7 @@ public class Upload {
      * @param token token
      * @param callback 回调接口
      */
-    public static void uploadLogo(String url, String userId, String token,Callback callback){
+    public static void upload(String url, String userId, String token, Callback callback){
 //        String resultPath = BitmapUtil.compressImage(getApplication(),path);
         String resultPath = url;
         File file = new File(resultPath);

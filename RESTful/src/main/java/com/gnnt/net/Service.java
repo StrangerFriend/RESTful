@@ -6,8 +6,10 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -32,31 +34,25 @@ public interface Service {
 //    })
     @GET("{end}")
     Call<ResponseBody> getParams(@Path(value = "end", encoded = true) String end
-            ,@Header("UserID") String userId,@Header("Token") String Token
-            ,@QueryMap Map<String, String> params);
+            , @QueryMap Map<String, String> params, @HeaderMap Map<String,String> headerMap);
 
     @POST("{end}")
     Call<ResponseBody> postParams(@Path(value = "end", encoded = true) String end
-            ,@Header("UserID") String userId,@Header("Token") String Token
-            , @Body RequestBody requestVO);
+            , @Body RequestBody requestVO, @HeaderMap Map<String,String> headerMap);
 
     @POST("{end}")
     Call<ResponseBody> postObject(@Path(value = "end", encoded = true) String end
-            ,@Header("UserID") String userId,@Header("Token") String Token
-            , @Body RequestBody requestVO);
+            , @Body RequestBody requestVO, @HeaderMap Map<String,String> headerMap);
 
     @PUT("{end}")
     Call<ResponseBody> putParams(@Path(value = "end", encoded = true) String end
-            ,@Header("UserID") String userId,@Header("Token") String Token
-            , @Body RequestBody requestVO);
+            , @Body RequestBody requestVO, @HeaderMap Map<String,String> headerMap);
 
     @PUT("{end}")
     Call<ResponseBody> putObject(@Path(value = "end", encoded = true) String end
-            ,@Header("UserID") String userId,@Header("Token") String Token
-            , @Body RequestBody requestVO);
+            , @Body RequestBody requestVO, @HeaderMap Map<String,String> headerMap);
 
-    @GET("{end}")
+    @DELETE("{end}")
     Call<ResponseBody> deleteParams(@Path(value = "end", encoded = true) String end
-            ,@Header("UserID") String userId,@Header("Token") String Token
-            , @QueryMap Map<String, String> params);
+            , @QueryMap Map<String, String> params, @HeaderMap Map<String,String> headerMap);
 }

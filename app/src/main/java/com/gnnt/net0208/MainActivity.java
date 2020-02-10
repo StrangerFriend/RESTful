@@ -6,26 +6,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.gnnt.net.Callback;
-import com.gnnt.net.HttpCommunicate;
+import com.gnnt.net.util.HttpRequest;
+import com.gnnt.net.callbacks.Callback;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private HttpCommunicate httpCommunicate;
+    private HttpRequest httprequest;
 
-    private String mUserId = "";
-    private String mToken = "";
+    public static String mUserId = "";
+    public static String mToken = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        HttpCommunicate.application = getApplication();
-        httpCommunicate = new HttpCommunicate("http://124.207.182.189:8091");
+        httprequest.application = getApplication();
+        httprequest = new HttpRequest("http://124.207.182.189:8091");
     }
 
     /**
@@ -37,15 +36,16 @@ public class MainActivity extends AppCompatActivity {
         param.put("mobilePhone","13088889998");
         param.put("password","1234566788");
         param.put("verifyCode","32323");
-        httpCommunicate.postParams("/customer/register/register", param, null
-                , new Callback() {
+        httprequest.paramsPost("/customer/register/register", param
+                , new Callback<Object>() {
                     @Override
-                    public void response(int result, String failMessage, Object o) {
-                        if(result ==1 ){
-                            Toast.makeText(getApplication(),"注册成功",Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(getApplication(), failMessage,Toast.LENGTH_SHORT).show();
-                        }
+                    public void successResponse(Object o) {
+                        Toast.makeText(getApplication(),"注册成功",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void failResponse(long retcode, String failMessage) {
+                        Toast.makeText(getApplication(), failMessage,Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -58,22 +58,39 @@ public class MainActivity extends AppCompatActivity {
         Map<String,String> params = new HashMap<>();
         params.put("username","13088889998");
         params.put("password","1234566788");
-        httpCommunicate.postParams("customer/login/loginByPwd", params, HashMap.class
+
+        /*httprequest.paramsPost("customer/login/loginByPwd", params
                 , new Callback<HashMap>() {
                     @Override
-                    public void response(int result, String failMessage, HashMap infoMap) {
-                        if(result == 1){
-                            Toast.makeText(getApplication(),"登录成功 token = "+infoMap.get("token"),Toast.LENGTH_SHORT).show();
+                    public void successResponse(HashMap infoMap) {
+                        Toast.makeText(getApplication(),"登录成功 token = "+infoMap.get("token"),Toast.LENGTH_SHORT).show();
 //                            mUserId = new BigDecimal("" +infoMap.get("userId"))
-                            Double doubleUserId = (Double) infoMap.get("userId");
-                            mUserId = "" + doubleUserId.intValue();
-                            mToken = (String) infoMap.get("token");
-                            httpCommunicate.setUserIdAndToken(mUserId,mToken);
-                        }else {
-                            Toast.makeText(getApplication(), failMessage,Toast.LENGTH_SHORT).show();
-                        }
+                        Double doubleUserId = (Double) infoMap.get("userId");
+                        mUserId = "" + doubleUserId.intValue();
+                        mToken = (String) infoMap.get("token");
+
+                    }
+
+                    @Override
+                    public void failResponse(long retcode, String failMessage) {
+                        Toast.makeText(getApplication(), failMessage,Toast.LENGTH_SHORT).show();
+                    }
+                });*/
+
+        httprequest.paramsPost("customer/login/loginByPwd", params
+                , new Callback<Object>() {
+
+                    @Override
+                    public void successResponse(Object responseInfo) {
+                        Toast.makeText(getApplicationContext(),"登录成功",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void failResponse(long retcode, String failMessage) {
+
                     }
                 });
+
     }
 
     /**
@@ -81,15 +98,16 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void getUserInfoClick(View view){
-        httpCommunicate.getParams("/customer/common/info",null , String.class
-                , new Callback<String>() {
+        httprequest.get("/customer/common/info",null
+                , new CustomCallback<String>() {
                     @Override
-                    public void response(int result, String failMessage, String info) {
-                        if(result ==1 ){
-                            Toast.makeText(getApplication(),info,Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(getApplication(), failMessage,Toast.LENGTH_SHORT).show();
-                        }
+                    public void successResponse(String info) {
+                        Toast.makeText(getApplication(),info,Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void failResponse(long retcode, String failMessage) {
+                        Toast.makeText(getApplication(), failMessage,Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -101,15 +119,17 @@ public class MainActivity extends AppCompatActivity {
     public void changeNickNameClick(View view){
         Map<String,String> paramsMap = new HashMap<>();
         paramsMap.put("nickName","张三");
-        httpCommunicate.putParams("/customer/common/updateNickName", paramsMap, String.class
-                , new Callback<String>() {
+        httprequest.paramsPut("/customer/common/updateNickName", paramsMap
+                , new CustomCallback<String>() {
                     @Override
-                    protected void response(int result, String failMessage, String responseInfo) {
-                        if(result == 1){
-                            Toast.makeText(getApplicationContext(),"修改昵称成功",Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(getApplicationContext(), failMessage,Toast.LENGTH_SHORT).show();
-                        }
+                    public void successResponse(String responseInfo) {
+                        //数据处理 --
+                        Toast.makeText(getApplicationContext(),"修改昵称成功",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void failResponse(long retcode, String failMessage) {
+                        Toast.makeText(getApplicationContext(), failMessage,Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -121,15 +141,16 @@ public class MainActivity extends AppCompatActivity {
     public void destroyUserClick(View view){
         Map<String,String> paramsMap = new HashMap<>();
         paramsMap.put("phone","13088889998");
-        httpCommunicate.postParams("/customer/cancellation/apply", paramsMap, String.class
-                , new Callback<String>() {
+        httprequest.paramsPost("/customer/cancellation/apply", paramsMap
+                , new CustomCallback<String>() {
                     @Override
-                    protected void response(int result, String failMessage, String responseInfo) {
-                        if(result == 1){
-                            Toast.makeText(getApplicationContext(),"注销成功",Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(getApplicationContext(), failMessage,Toast.LENGTH_SHORT).show();
-                        }
+                    public void successResponse( String responseInfo) {
+                        Toast.makeText(getApplicationContext(),"注销成功",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void failResponse(long retcode, String failMessage) {
+                        Toast.makeText(getApplicationContext(), failMessage,Toast.LENGTH_SHORT).show();
                     }
                 });
     }
