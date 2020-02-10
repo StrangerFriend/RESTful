@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         params.put("username","13088889998");
         params.put("password","1234566788");
 
-        /*httprequest.paramsPost("customer/login/loginByPwd", params
+        httprequest.paramsPost("customer/login/loginByPwd", params
                 , new Callback<HashMap>() {
                     @Override
                     public void successResponse(HashMap infoMap) {
@@ -68,16 +68,15 @@ public class MainActivity extends AppCompatActivity {
                         Double doubleUserId = (Double) infoMap.get("userId");
                         mUserId = "" + doubleUserId.intValue();
                         mToken = (String) infoMap.get("token");
-
                     }
 
                     @Override
                     public void failResponse(long retcode, String failMessage) {
                         Toast.makeText(getApplication(), failMessage,Toast.LENGTH_SHORT).show();
                     }
-                });*/
+                });
 
-        httprequest.paramsPost("customer/login/loginByPwd", params
+        /*httprequest.paramsPost("customer/login/loginByPwd", params
                 , new Callback<Object>() {
 
                     @Override
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     public void failResponse(long retcode, String failMessage) {
 
                     }
-                });
+                });*/
 
     }
 

@@ -220,9 +220,7 @@ public class HttpRequest {
                         String bodyStr = response.errorBody().string();//失败信息
                         Gson gson = new Gson();
                         ErrorResponseVO errorResponseVO = gson.fromJson(bodyStr, ErrorResponseVO.class);
-                        if(callback.afterResponseError(errorResponseVO)){
-                            return;
-                        }
+                        callback.afterResponseError(errorResponseVO);
                         callback.failResponse(errorResponseVO.getCode(),errorResponseVO.getMsg());
                     }
                 }catch (Exception e){

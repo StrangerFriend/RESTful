@@ -10,7 +10,10 @@ import java.util.Map;
  *Callback 2020/2/8
  *<p>
  *类说明:获取请求数据的回调抽象类<br/>
- * 项目使用时需根据具体的需求对该类进行重写，一般不会直接使用该类
+ * +++++ 不建议直接使用该类 项目中应该根据需求使用一个重写的子类 +++
+ * 该类是网路库扩展的核心
+ * 项目使用时需根据具体的需求对该类进行重写
+ * T 服务端返回的数据的映射对象，内部自动转换，view调用处不用再手动转换
  *<br/>
  *</p>
  *Copyright2019 by GNNT Company. All Rights Reserved.
@@ -18,9 +21,13 @@ import java.util.Map;
  *********************************************************************************/
 public abstract class Callback <T> {
 
+    /**
+     * 泛型对象
+     */
     private Class<T> clz;
 
     public Callback() {
+        //获取泛型对象
         ParameterizedType pt = (ParameterizedType) this.getClass()
                 .getGenericSuperclass();
         this.clz = (Class) pt.getActualTypeArguments()[0];
@@ -41,11 +48,8 @@ public abstract class Callback <T> {
 
     /**
      * 获得请求后失败的统一处理，比如失效退出--针对每次请求的
-     * @return 是否处理 返回true则failResponse方法不在执行
      */
-    public boolean afterResponseError(ErrorResponseVO errorResponseVO){
-        return false;
-    }
+    public void afterResponseError(ErrorResponseVO errorResponseVO){}
 
     /**
      * 成功数据获取回调
@@ -60,6 +64,10 @@ public abstract class Callback <T> {
      */
     public abstract void failResponse(long retcode, String failMessage);
 
+    /**
+     * 返回class泛型对象
+     * @return
+     */
     public final Class<T> getClz() {
         return clz;
     }
