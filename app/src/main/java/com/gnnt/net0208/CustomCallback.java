@@ -26,8 +26,5 @@ public abstract class CustomCallback<T> extends Callback<T> {
     @Override
     public abstract void failResponse(long retcode, String failMessage) ;
 
-    @Override
-    public boolean afterResponseError(ErrorResponseVO errorResponseVO) {
-        return super.afterResponseError(errorResponseVO);
-    }
+
 }

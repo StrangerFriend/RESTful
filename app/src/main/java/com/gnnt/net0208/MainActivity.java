@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.gnnt.net.util.HttpRequest;
 import com.gnnt.net.callbacks.Callback;
+import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -97,11 +98,24 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
     public void getUserInfoClick(View view){
-        httprequest.get("/customer/common/info",null
+        /*httprequest.get("/customer/common/info",null
                 , new CustomCallback<String>() {
                     @Override
                     public void successResponse(String info) {
                         Toast.makeText(getApplication(),info,Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void failResponse(long retcode, String failMessage) {
+                        Toast.makeText(getApplication(), failMessage,Toast.LENGTH_SHORT).show();
+                    }
+                });*/
+
+        httprequest.get("/customer/common/info",null
+                , new CustomCallback<JsonObject>() {
+                    @Override
+                    public void successResponse(JsonObject info) {
+                        Toast.makeText(getApplication(),info.toString(),Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
