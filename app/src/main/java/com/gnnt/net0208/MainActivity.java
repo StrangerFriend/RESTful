@@ -10,6 +10,9 @@ import com.gnnt.net.util.HttpRequest;
 import com.gnnt.net.callbacks.Callback;
 import com.google.gson.JsonObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +29,89 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         httprequest.application = getApplication();
         httprequest = new HttpRequest("http://124.207.182.189:8091");
+
+        timeZone2GMT("2020-2-11 4:13:27");
+        timeGMT2Zone("2020-2-11 19:24:45");
+    }
+
+    private final long hour = 360000;
+    private void date(){
+      /*  Date date = new Date();
+        TimeZone timeZone = TimeZone.getDefault();
+        String aaaa = "fsfs";
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM ddHH:mm:ss 'GMT' yyyy", Locale.US);*/
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.getTimeZone().getID();
+
+        int zoneOffset = calendar.get(Calendar.ZONE_OFFSET);//标准时间偏移量
+
+        //取得与GMT之间的时间偏移量，例如罗马属于东1区，则时间偏移量为3600000毫秒
+//        int dstOffset = calendar.get(Calendar.DST_OFFSET);//夏令时时间偏移量
+
+
+        Date date = new Date();
+        long l2 = date.getTime() - zoneOffset;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = sdf.format(new Date(l2));
+        String aaaa = "fsfs";
+    }
+
+    /**
+     * 时区时间转GMT时间
+     * @return
+     */
+    private String getCurrentGMT(){
+        Calendar calendar = Calendar.getInstance();
+        //取得与GMT之间的时间偏移量，例如罗马属于东1区，则时间偏移量为3600000毫秒
+        int zoneOffset = calendar.get(Calendar.ZONE_OFFSET);//标准时间偏移量
+        Date date = new Date();//获取当前时间
+        long gmtLong = date.getTime() - zoneOffset;//获取gmt时间time值
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = sdf.format(new Date(gmtLong));
+        return format;
+    }
+
+    /**
+     * 时区时间转GMT时间
+     * @return
+     */
+    private String timeZone2GMT(String zoneTime){
+        try {
+            Calendar calendar = Calendar.getInstance();
+            //取得与GMT之间的时间偏移量，例如罗马属于东1区，则时间偏移量为3600000毫秒
+            int zoneOffset = calendar.get(Calendar.ZONE_OFFSET);//标准时间偏移量
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date zoneDate = sdf.parse(zoneTime);
+            long gmtLong = zoneDate.getTime() - zoneOffset;//获取gmt时间值
+            String format = sdf.format(new Date(gmtLong));
+            return format;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * GMT时间转时区时间
+     * @return
+     */
+    private String timeGMT2Zone(String GmtTime){
+        try{
+            Calendar calendar = Calendar.getInstance();
+            //取得与GMT之间的时间偏移量，例如罗马属于东1区，则时间偏移量为3600000毫秒
+            int zoneOffset = calendar.get(Calendar.ZONE_OFFSET);//标准时间偏移量
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            long GmtTimeLong = sdf.parse(GmtTime).getTime();
+            long zoneTimeLong = GmtTimeLong + zoneOffset;//获取时区对应的时间值
+            String format = sdf.format(new Date(zoneTimeLong));
+            return format;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "";
     }
 
     /**
