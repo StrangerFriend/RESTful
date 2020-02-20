@@ -1,11 +1,18 @@
 package com.gnnt.net0208;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Toast;
 
+import com.gnnt.net.callbacks.UploadCallback;
+import com.gnnt.net.util.HttpFileRequest;
 import com.gnnt.net.util.HttpRequest;
 import com.gnnt.net.callbacks.Callback;
 import com.google.gson.JsonObject;
@@ -254,4 +261,59 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * 上传图片
+     * @param view
+     */
+    public void uploadClick(View view){
+        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intentToPickPic, 2020);
+
+        /*try{
+            String aaa = getAssets().list("")[0];
+            HttpFileRequest.upload("http://124.207.182.189:8091/customer/authentication/uploadApplyPhoto"
+                    , aaa , mUserId, mToken, new HttpFileRequest.Callback() {
+                        @Override
+                        public void success() {
+
+                        }
+
+                        @Override
+                        public void fail(String message) {
+
+                        }
+                    });
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }*/
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == 2020 && resultCode == Activity.RESULT_OK){
+            Uri data1 = data.getData();
+            String path = GetPathFromUri.getInstance().getPath(this,data1);
+//            path = BitmapUtil.compressImage(getApplication(),path);
+            HttpFileRequest.upload("http://124.207.182.189:8091/customer/authentication/uploadApplyPhoto"
+                    , path , mUserId, mToken, new UploadCallback() {
+                        @Override
+                        public void success() {
+                            Toast.makeText(MainActivity.this,"上传图片成功",Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void fail(String message) {
+
+                        }
+                    });
+
+        }else{
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
 }
