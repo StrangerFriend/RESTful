@@ -102,7 +102,7 @@ public class BitmapUtil {
     public static String compressImage(Application application, String filePath) {
         File oldFile = new File(filePath);
         //压缩文件路径 照片路径/
-        String targetPath = application.getExternalCacheDir().toString() + "/"+ UUID.randomUUID().toString();
+        String targetPath = application.getExternalCacheDir().toString() + "/"+ UUID.randomUUID().toString()+".png";
         int quality = 50;//压缩比例0-100
         Bitmap bm = getSmallBitmap(filePath);//获取一定尺寸的图片
         int degree = getRotateAngle(filePath);//获取相片拍摄角度
