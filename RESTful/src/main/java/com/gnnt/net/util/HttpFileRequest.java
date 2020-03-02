@@ -32,9 +32,10 @@ public class HttpFileRequest {
      * @param url 请求完整地址
      * @param userId 用户id
      * @param token token
+`     * @param logoKey 接口中的键值名
      * @param callback 回调接口
      */
-    public static void upload(String url, String path,String userId, String token, UploadCallback callback){
+    public static void upload(String url, String path,String userId, String token, String logoKey,UploadCallback callback){
         Handler handler = new Handler();
 //        String resultPath = BitmapUtil.compressImage(getApplication(),path);
         String resultPath = path;
@@ -46,7 +47,7 @@ public class HttpFileRequest {
 //                .addPart(Headers.of("Content-Disposition", "form-data; name=\"SI\""), RequestBody.create(FORM_CONTENT_TYPE, token));
         builder.setType(MultipartBody.FORM)
 //                .addFormDataPart("image", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
-                .addFormDataPart("idPhoto", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+                .addFormDataPart(logoKey, file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
         RequestBody requestBody = builder.build();
         final Request request = new Request.Builder()
                 .addHeader("UserID",userId)

@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
             String path = GetPathFromUri.getInstance().getPath(this,data1);
 //            path = BitmapUtil.compressImage(getApplication(),path);
             HttpFileRequest.upload("http://124.207.182.189:8091/customer/authentication/uploadApplyPhoto"
-                    , path , mUserId, mToken, new UploadCallback() {
+                    , path , mUserId, mToken, "",new UploadCallback() {
                         @Override
                         public void success() {
                             Toast.makeText(MainActivity.this,"上传图片成功",Toast.LENGTH_SHORT).show();
